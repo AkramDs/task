@@ -7,4 +7,4 @@ def test_square_number():
 def square_number(number):
     return number ** 2
 
-test_square_number()
+test_square_number()#
