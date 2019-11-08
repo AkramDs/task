@@ -5,9 +5,8 @@ class Hero:
         self.name = name
         self.level = level
     
-    def upLevel(self):
-        self.level += 1
-
+    def upLevel(self, changeLevel):
+        self.level += changeLevel
 
 class Soldier:
     def __init__(self, number):
@@ -16,48 +15,82 @@ class Soldier:
     def goToHero(self, hero):
         return f'{self.number} иду за {hero.name}'
 
-Gazgyl_mak_uruk_traka = Hero('Газгул мак урук трака')
+class Play:
+    lostLevel = 0
+
+    def teamCreater(self, teamRange):
+        self.teamRed = []
+        self.teamBlue = []
+
+        for i in range(teamRange):
+            number = random.randint(0, 1)
+            #print(number)
+
+            if number == 1:
+                soldierRed = Soldier(i)
+                self.teamRed.append(soldierRed)
+            
+            elif number == 0:
+                soldierBlue = Soldier(i)
+                self.teamBlue.append(soldierBlue)
+            
+            else:
+                soldierRed = Soldier(i)
+                self.teamRed.append(soldierRed)
+
+                soldierBlue = Soldier(i)
+                self.teamBlue.append(soldierBlue)
+
+    
+    def StartGame(self, gazgyl, linus):
+        teamSoldierRed = random.randint(0, self.teamRed.__len__())
+        teamSoldierBlue = random.randint(0, self.teamBlue.__len__())
+
+        print(self.teamRed.__len__(), self.teamBlue.__len__())
+        print(teamSoldierRed, teamSoldierBlue)
+
+        goToGazgyl = self.teamRed[-teamSoldierRed].goToHero(gazgyl)
+        goToLinus = self.teamBlue[-teamSoldierBlue].goToHero(linus)
+
+        print('\n')
+
+        if self.teamRed.__len__() > self.teamBlue.__len__():
+            print(f'Победил: {gazgyl.name}')
+
+            gazgyl.upLevel(1)
+
+            print(goToGazgyl)
+            print(f'Уровень {gazgyl.name}: {gazgyl.level}')
+
+        elif self.teamBlue.__len__() > self.teamRed.__len__():
+            print(f'Победил: {linus.name}')
+
+            linus.upLevel(1)
+
+            print(goToLinus)
+            print(f'Уровень {linus.name}: {linus.level}')
+
+        else:
+            print('Ничия')
+
+            self.lostLevel += 1
+        
+            # gazgyl.upLevel(2)
+            # print(goToGazgyl)
+            print(f'Уровень {gazgyl.name}: {gazgyl.level}')
+
+            print('\n')
+
+            #linus.upLevel(2)
+            #print(goToLinus)
+            print(f'Уровень {linus.name}: {linus.level}')
+
+gazgyl_mak_uruk_traka = Hero('Газгул мак урук трака')
 linus_torvalts = Hero('Линус торвалтс')
 
-teamRed = []; teamBlue = []
+start = Play()
+for _ in range(120):
+    start.teamCreater(100)
+    start.StartGame(gazgyl_mak_uruk_traka, linus_torvalts)
 
-for _ in range(100):
-    number = random.random()
-
-    if number < 0.55555555555555555:
-        soldierBlue = Soldier(_)
-        teamBlue.append(soldierBlue)
-
-    elif number > 0.55555555555555555:
-        soldierRed = Soldier(_)
-        teamRed.append(soldierRed)
-
-teamSoldierRed = random.randint(0, teamRed.__len__() - 1)
-teamSoldierBlue = random.randint(0, teamBlue.__len__() - 1)
-
-print(teamBlue.__len__(), teamRed.__len__())
-print(teamSoldierBlue, teamSoldierRed)
-
-gazgyl = teamBlue[teamSoldierRed].goToHero(Gazgyl_mak_uruk_traka)
-linus = teamRed[teamSoldierBlue].goToHero(linus_torvalts)
-
-if teamRed.__len__() > teamBlue.__len__():
-    Gazgyl_mak_uruk_traka.upLevel()
-
-    print(gazgyl)
-    print(f'Уровень {Gazgyl_mak_uruk_traka.name}:', Gazgyl_mak_uruk_traka.level)
-
-elif teamBlue.__len__() > teamRed.__len__():
-    linus_torvalts.upLevel()
-
-    print(linus)
-    print(f'Уровень {linus_torvalts.name}: ',linus_torvalts.level)
-
-else:
-    Gazgyl_mak_uruk_traka.upLevel()
-    print(gazgyl)
-    print(f'Уровень {Gazgyl_mak_uruk_traka.name}:', Gazgyl_mak_uruk_traka.level)
-
-    linus_torvalts.upLevel()
-    print(linus)
-    print(f'Уровень {linus_torvalts.name}: ',linus_torvalts.level)
+print('\n', start.lostLevel)
